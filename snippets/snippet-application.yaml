@@ -1,0 +1,16 @@
+
+    kafka:
+        bootstrap-servers: 127.0.0.1:9092
+        producer:
+            topic: books
+            client-id: book_api
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        consumer:
+            topic: books
+            group-id: book_api
+            auto-offset-reset: earliest
+            enable-auto-commit: false
+            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            properties:
+                spring.json.trusted.packages: "{{directory_path_code}}.samples.kafka"

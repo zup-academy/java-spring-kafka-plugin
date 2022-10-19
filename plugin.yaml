@@ -6,6 +6,8 @@ category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/y
 compatibility:
   - java
   - spring
+  - maven
+  - application.yaml
 about: docs/about.md
 usage: docs/usage.md
 use-case: docs/use-case.md
@@ -14,18 +16,82 @@ technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/
   - "Api"
 types:
   - app
-inputs:
-  - label: Input Example
-    type: text
-    name: example
-    default: any text
-  - label: Example of number
-    type: int
-    name: any_number
-    default: "10"
-  - label: Example of list
-    type: multiselect
-    name: any_list
-    items:
-      - item1
-      - item2
+
+computed-inputs:
+  directory: "{{directory_path | replace('.','/')}}"
+  directory_test: "{{directory_test_path | replace('.','/')}}"
+
+hooks:
+  ##
+  # Edit pom.xml add multiples dependencies with Spring Kafka, Spring Kafka Test and Awaitility
+  ##
+  - type: edit
+    path: pom.xml
+    trigger: after-render
+    changes:
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom.xml
+          when:
+            not-exists-snippet: snippets/snippet-pom.xml
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom-dependency-starter-validation.xml
+          when:
+            not-exists: "spring-boot-starter-validation"
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom-dependency-awaitility.xml
+          when:
+            not-exists: "awaitility"
+
+  ##
+  # Edit application.yaml
+  ##
+  - type: edit
+    path: src/main/resources/application.yaml
+    trigger: after-render
+    changes:
+      - search:
+          string: "spring:"
+          insert-after:
+            snippet: snippets/snippet-application.yaml
+          when:
+            not-exists: "kafka:"
+
+  ##
+  # Create or edit docker-compose.yaml
+  ##
+  - type: render-templates
+    trigger: after-render
+    path: snippets/docker-kafka
+
+  ##
+  # Create path directory samples
+  ##
+  - type: run-script
+    trigger: before-input
+    script: snippets/open-pom.py
+
+  ##
+  # Anottation @EnableKafka in Main Class
+  #
+  - type: edit
+    path: "{{application_class_full_path}}"
+    trigger: after-render
+    changes:
+      - search:
+          string: "import org.springframework.boot.SpringApplication;"
+          insert-before:
+            value: "import org.springframework.kafka.annotation.EnableKafka;\n"
+            when:
+              not-exists: "import org.springframework.kafka.annotation.EnableKafka;"
+      - search:
+          string: "@SpringBootApplication"
+          insert-before:
+            value: "@EnableKafka\n"
+          when:
+            not-exists: "@EnableFeignClients\n"
