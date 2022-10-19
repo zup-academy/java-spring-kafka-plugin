@@ -1,0 +1,11 @@
+        
+        <!-- ****************** -->
+        <!--    JUnit Pioneer   -->
+        <!-- ****************** -->
+        
+        <dependency>
+            <groupId>org.junit-pioneer</groupId>
+            <artifactId>junit-pioneer</artifactId>
+            <version>1.7.1</version>
+            <scope>test</scope>
+        </dependency>

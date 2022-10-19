@@ -3,6 +3,7 @@ package {{directory_path_code}}.samples.kafka.producer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.DefaultLocale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -81,6 +82,7 @@ class BookProducerTest {
     }
     
     @Test
+    @DefaultLocale(language = "en")
     @DisplayName("should not send a null message")
     void t3() {
         //action   and validation
@@ -96,6 +98,7 @@ class BookProducerTest {
     }
 
     @Test
+    @DefaultLocale(language = "en")
     @DisplayName("should not send invalid message")
     void t4() {
         //scenary
@@ -107,7 +110,7 @@ class BookProducerTest {
                 () -> producer.send(bookEvent)
         );
 
-        assertThat(violations)                               
+        assertThat(violations)                            
                 .hasMessageContainingAll(
                         "send.book.price: must not be null",
                         "send.book.id: must not be null",

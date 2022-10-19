@@ -47,6 +47,12 @@ hooks:
             snippet: snippets/snippet-pom-dependency-awaitility.xml
           when:
             not-exists: "awaitility"
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom-dendency-junitpioner.xml
+          when:
+            not-exists: "junit-pioneer"
 
   ##
   # Edit application.yaml
