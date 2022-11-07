@@ -37,7 +37,7 @@ git status
 
 Nice! You're ready for production I guess 🥳
 
-[See here the benefits and how you can get the most out of the Java Spring Kafka Plugin](http://video-will-be-published.soon/)
+[See here the benefits and how you can get the most out of the Java Spring Kafka Plugin](https://youtu.be/Gx2ejA3buEA)
 
 ## Support
 
